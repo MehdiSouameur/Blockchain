@@ -77,6 +77,8 @@ namespace BlockchainAssignment
             // Retrieve pending transactions to be added to the newly generated Block
             List<Transaction> transactions = blockchain.GetPendingTransactions();
             int mineCount = blockchain.getMineCount();
+            string iterationMessage = "";
+
             // Create and append the new block - requires a reference to the previous block, a set of transactions and the miners public address (For the reward to be issued)
             Block newBlock = new Block(blockchain.GetLastBlock(), transactions, mineCount, blockchain.difficulty, publicKey.Text);
             int mineTime = newBlock.getMineTime();
@@ -88,6 +90,7 @@ namespace BlockchainAssignment
             if(newBlock.mineCountStatus == true)
             {
                 blockchain.setMineCount(0);
+                iterationMessage = newBlock.newIterationMessage();
             }
             if(newBlock.increaseDifficulty == true)
             {
@@ -100,6 +103,10 @@ namespace BlockchainAssignment
 
 
             UpdateText(blockchain.ToString());
+            if(iterationMessage != "")
+            {
+                richTextBox1.Text += iterationMessage;
+            }
         }
 
 
@@ -149,6 +156,82 @@ namespace BlockchainAssignment
         private void checkBalance_Click(object sender, EventArgs e)
         {
             richTextBox1.Text = blockchain.GetBalance(publicKey.Text).ToString() + "Assignment Coin";
+        }
+
+
+        //Greedy transaction button
+        private void greedyTransaction_Click(object sender, EventArgs e)
+        {
+            if(blockchain.transactionPool.Count != 0)
+            {
+                blockchain.greedySort();
+                richTextBox1.Text = "Transaction order set to Greedy!\nCurrent pending Transactions:\n\n";
+                foreach (Transaction transaction in blockchain.transactionPool)
+                {
+                    richTextBox1.Text += transaction.ToString() + "\n";
+                }
+            }
+            
+        }
+
+        //Print pending transactions
+        private void printTransactions_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Text = "Current pending Transactions:\n\n";
+            foreach (Transaction transaction in blockchain.transactionPool)
+            {
+                richTextBox1.Text += transaction.ToString() + "\n";
+            }
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void receiver_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //Random transactions button
+        private void randomTransaction_Click(object sender, EventArgs e)
+        {
+            if(blockchain.transactionPool.Count != 0)
+            {
+                blockchain.randomSort();
+                richTextBox1.Text = "Transaction order set to Random!\nCurrent pending Transactions:\n\n";
+                foreach (Transaction transaction in blockchain.transactionPool)
+                {
+                    richTextBox1.Text += transaction.ToString() + "\n";
+                }
+            }
+        }
+
+        private void altruisticTransaction_Click(object sender, EventArgs e)
+        {
+            if(blockchain.transactionPool.Count != 0)
+            {
+                blockchain.altruisticSort();
+                richTextBox1.Text = "Transaction order set to Altruistic!\nCurrent pending Transactions:\n\n";
+                foreach (Transaction transaction in blockchain.transactionPool)
+                {
+                    richTextBox1.Text += transaction.ToString() + "\n";
+                }
+            }
+        }
+
+        private void addressTransaction_Click(object sender, EventArgs e)
+        {
+            if(blockchain.transactionPool.Count != 0)
+            {
+                blockchain.addressSort(transactionAddress.Text);
+                richTextBox1.Text = "Transaction order set by address: !" + transactionAddress.Text + "\nCurrent pending Transactions:\n\n";
+                foreach (Transaction transaction in blockchain.transactionPool)
+                {
+                    richTextBox1.Text += transaction.ToString() + "\n";
+                }
+            }
         }
     }
 }

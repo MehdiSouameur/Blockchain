@@ -21,7 +21,7 @@ namespace BlockchainAssignment
         public String merkleRoot;
 
         public long nonce = 0;
-        public int difficulty = 2;
+        public int difficulty = 3;
 
         //Variables for Task1
         public long extraNonce = 5;
@@ -108,8 +108,10 @@ namespace BlockchainAssignment
 
             stopwatch.Start();
 
+            //Multithreading
             for(int i = 0; i < mineIterations; i++)
             {
+                
                 Thread extraThread = new Thread(() => Mine(extraNonce, cts.Token));
                 Thread mainThread = new Thread(() => Mine(nonce, cts.Token));
 
@@ -118,6 +120,9 @@ namespace BlockchainAssignment
 
                 extraThread.Join();
                 mainThread.Join();
+                
+                
+                
             }
 
             stopwatch.Stop();
@@ -323,6 +328,14 @@ namespace BlockchainAssignment
         public int getMineIterations()
         {
             return mineIterations;
+        }
+
+        public string newIterationMessage()
+        {
+            String message = "Average Mine Time over past 10 blocks: " + mineTimeAverage + " ms\n" +
+                "10th block mined, iterations adjusted\n" +
+                "New number of iterations: " + mineIterations;
+            return message;
         }
     }
 }

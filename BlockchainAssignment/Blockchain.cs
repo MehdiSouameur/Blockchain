@@ -14,7 +14,7 @@ namespace BlockchainAssignment
         public int mineCount = 0;
         public int mineTimeAverage = 0;
         public int blockchainIndex = 0;
-        public int difficulty = 1;
+        public int difficulty = 3;
 
         public List<Transaction> transactionPool = new List<Transaction>();
         int transactionsPerBlock = 5;
@@ -110,5 +110,34 @@ namespace BlockchainAssignment
             this.mineCount = mineCount;
 
          }
+
+        //Task 3 Methods
+
+        public void greedySort()
+        {
+            transactionPool.Sort((a, b) => b.fee.CompareTo(a.fee));
+        }
+
+        public void randomSort()
+        {
+            Random rand = new Random();
+            transactionPool = transactionPool.OrderBy(x => rand.Next()).ToList();
+        }
+
+        public void altruisticSort()
+        {
+            transactionPool.Sort((a, b) => a.timestamp.CompareTo(b.timestamp));
+        }
+
+        public void addressSort(string address)
+        {
+            transactionPool.Sort((x, y) =>
+            {
+                if (x.recipientAddress == y.recipientAddress) return 0;
+                if (x.recipientAddress == address) return -1;
+                if (y.recipientAddress == address) return 1;
+                return x.recipientAddress.CompareTo(y.recipientAddress);
+            });
+        }
     }
 }
