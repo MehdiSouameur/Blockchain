@@ -1,1 +1,1 @@
- Blockchain repository for the blockchahin Module at the University of Reading
+ Blockchain repository for the blockchain Module at the University of Reading.
